@@ -30,7 +30,7 @@ class ArticleController extends Controller
         $article->title = request()->title;
         $article->paragraph = request()->paragraph;
         $article->category = request()->category;
-        // $article->photo = request()->photo;
+        $article->photo = request()->photo;
         // $article->user_id = 1;
         $article->save();
 
@@ -46,7 +46,6 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        // return Article::find($id);
         return $article;
     }
 
@@ -59,8 +58,7 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        // $article = Article::find($id);
-        // $article = new Article;
+        $article = Article::find($id);
         $article->user = request()->user;
         $article->title = request()->title;
         $article->paragraph = request()->paragraph;

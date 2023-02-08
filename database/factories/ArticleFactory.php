@@ -21,9 +21,6 @@ class ArticleFactory extends Factory
             'title'=> $this->faker->sentence(),
             'paragraph' => $this->faker->paragraph(),
             'category' => $this->faker->word(),
-            'created_at'=>$this->faker->dateTimeBetween("-1 day" , now()),
-
-
             // 'user_id' => rand(1,2)
             // 'photo'=>$this->faker->image("https://picsum.photos/seed/picsum/200/300"),
         ];
