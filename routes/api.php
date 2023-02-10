@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\PhotoController;
 use App\Models\Article;
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +17,7 @@ use App\Models\Article;
 */
 
 Route::apiResource('/article', ArticleController::class);
+Route::apiResource('/photo', PhotoController::class);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Storage;
+ 
 class ArticleController extends Controller
 {
     /**
@@ -25,12 +26,23 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
+        // $name = request()->file('photo')->getClientOriginalName();
+        $file = request()->file('photo')->getClientOriginalExtension();
+        $name = time().'.'.$file;
+
+        $request->file('photo')->storeAs('public/images/', $name);
+        // $url_name = asset("public/images/".$name);
+ 
+        // $url = Storage::url("images/".$name);
+        $url = asset("storage/images/".$name);
+
+        // $url = Storage::get($name);
         $article = new Article;
         $article->user = request()->user;
         $article->title = request()->title;
         $article->paragraph = request()->paragraph;
         $article->category = request()->category;
-        // $article->photo = request()->photo;
+        $article->photo = $url;
         // $article->user_id = 1;
         $article->save();
 
@@ -59,11 +71,19 @@ class ArticleController extends Controller
     public function update(Request $request, Article $article)
     {
         // $article = Article::find($id);
+        $file = request()->file('photo')->getClientOriginalExtension();
+        $name = time().'.'.$file;
+        $request->file('photo')->storeAs("public/images/", $name);
+
+        $url = asset("storage/images/".$name);
+
+
+        $article = new Article;
         $article->user = request()->user;
         $article->title = request()->title;
         $article->paragraph = request()->paragraph;
         $article->category = request()->category;
-        // $article->photo = request()->photo;
+        $article->photo = $url;
         // $article->user_id = request()->user_id;
 
         $article->save();
