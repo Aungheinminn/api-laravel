@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+// use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
  
 class ArticleController extends Controller
 {
@@ -31,9 +34,7 @@ class ArticleController extends Controller
         $name = time().'.'.$file;
 
         $request->file('photo')->storeAs('public/images/', $name);
-        // $url_name = asset("public/images/".$name);
  
-        // $url = Storage::url("images/".$name);
         $url = asset("storage/images/".$name);
 
         // $url = Storage::get($name);
@@ -71,33 +72,43 @@ class ArticleController extends Controller
     public function update(Request $request, Article $article)
     {
         // $article = Article::find($id);
-        $file = request()->file('photo')->getClientOriginalExtension();
-        $name = time().'.'.$file;
-        $request->file('photo')->storeAs("public/images/", $name);
+        if($request->hasFile('photo')){ 
+            $file = request()->file('photo')->getClientOriginalExtension();
+            $postfile = public_path('images/'.$file);
 
-        $url = asset("storage/images/".$name);
+            if(File::exists($postfile)){
+                File::delete($postfile);
+            }    
+            $file = request()->file('photo')->getClientOriginalExtension();
+            $name = time().'.'.$file;
 
-
-        $article = new Article;
-        $article->user = request()->user;
-        $article->title = request()->title;
-        $article->paragraph = request()->paragraph;
-        $article->category = request()->category;
-        $article->photo = $url;
+            $request->file('photo')->storeAs('public/images/', $name);
+            $url = asset("storage/images/".$name);
+            // $article = new Article;
+            $article->user = request()->user;
+            $article->title = request()->title;
+            $article->paragraph = request()->paragraph;
+            $article->category = request()->category;
+            $article->photo = $url;  
         // $article->user_id = request()->user_id;
+            $article->update();
 
-        $article->save();
+        
+        }    
+           
 
         return $article;
+        
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Article $article)
+    public function destroy(Request $request, Article $article)
     {
         // $article = Article::find($id);
         $article->delete();
