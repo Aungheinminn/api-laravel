@@ -72,30 +72,30 @@ class ArticleController extends Controller
     public function update(Request $request, Article $article)
     {
         // $article = Article::find($id);
-        if($request->hasFile('photo')){ 
-            $file = request()->file('photo')->getClientOriginalExtension();
-            $postfile = public_path('images/'.$file);
+        // if($request->hasFile('photo')){ 
+        //     $file = request()->file('photo')->getClientOriginalExtension();
+        //     $postfile = public_path('images/'.$file);
 
-            if(File::exists($postfile)){
-                File::delete($postfile);
-            }    
-            $file = request()->file('photo')->getClientOriginalExtension();
-            $name = time().'.'.$file;
-
-            $request->file('photo')->storeAs('public/images/', $name);
-            $url = asset("storage/images/".$name);
-            // $article = new Article;
-            $article->user = request()->user;
-            $article->title = request()->title;
-            $article->paragraph = request()->paragraph;
-            $article->category = request()->category;
-            $article->photo = $url;  
-        // $article->user_id = request()->user_id;
-            $article->update();
+        //     if(File::exists($postfile)){
+        //         File::delete($postfile);
+        //     }    
+          
 
         
-        }    
-           
+        // }    
+        $file = request()->file('photo')->getClientOriginalExtension();
+        $name = time().'.'.$file;
+
+        $request->file('photo')->storeAs('public/images/', $name);
+        $url = asset("storage/images/".$name);
+        // $article = new Article;
+        $article->user = request()->user;
+        $article->title = request()->title;
+        $article->paragraph = request()->paragraph;
+        $article->category = request()->category;
+        $article->photo = $url;  
+        // $article->user_id = request()->user_id;
+        $article->update();
 
         return $article;
         
@@ -109,8 +109,12 @@ class ArticleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, Article $article)
-    {
+    {   
+        // if($request->hasFile('photo')){
+        //     $article->photo->delete();
+        // }
         // $article = Article::find($id);
+        // $article->photo->delete();
         $article->delete();
 
         return $article;
